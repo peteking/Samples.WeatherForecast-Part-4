@@ -1,0 +1,41 @@
+name: Build and Publish
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+env:
+  image-name: ghcr.io/peterjking/samples-weatherforecast-part-4:${{ github.sha }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build . -t ${{ env.image-name }}
+
+      - name: Scan docker image
+        uses: azure/container-scan@v0
+        with:
+          image-name: ${{ env.image-name }}
+          severity-threshold: MEDIUM
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_CR }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_CR }}
+
+      - name: Push docker image
+        run: docker push ${{ env.image-name }}
