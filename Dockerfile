@@ -20,8 +20,13 @@ RUN dotnet publish \
 
 # Final stage/image
 FROM mcr.microsoft.com/dotnet/runtime-deps:${VERSION}
+
+RUN addgroup -S dotnetgroup && \
+    adduser -S dotnet
+USER dotnet
+
 WORKDIR /app
-COPY --from=publish /out .
+COPY --chown=dotnet --from=publish /out .
 
 EXPOSE 8080
 ENTRYPOINT ["./Samples.WeatherForecast.Api"]
