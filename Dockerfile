@@ -26,7 +26,7 @@ RUN addgroup -S dotnetgroup && \
 USER dotnet
 
 WORKDIR /app
-COPY --chown=dotnet --from=publish /out .
+COPY --chown=dotnet:dotnetgroup --from=publish /out .
 
 EXPOSE 8080
 ENTRYPOINT ["./Samples.WeatherForecast.Api"]
