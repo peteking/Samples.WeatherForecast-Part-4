@@ -3,13 +3,11 @@ name: Build and Publish
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
   workflow_dispatch:
 
 env:
-  image-name: ghcr.io/peterjking/samples-weatherforecast-part-4:${{ github.sha }}
+  image-name: ghcr.io/peterjking/samples-weatherforecast-part-4:latest
 
 jobs:
   build-and-push:
