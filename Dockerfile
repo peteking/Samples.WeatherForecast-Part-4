@@ -27,7 +27,8 @@ RUN addgroup -g 1000 dotnet && \
 WORKDIR /app
 COPY --chown=dotnet:dotnet --from=publish /out .
 
+ENV ASPNETCORE_URLS=http://*:8080
+
 USER dotnet
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://*:8080
 ENTRYPOINT ["./Samples.WeatherForecast.Api"]
