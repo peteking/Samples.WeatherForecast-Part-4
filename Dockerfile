@@ -21,12 +21,13 @@ RUN dotnet publish \
 # Final stage/image
 FROM mcr.microsoft.com/dotnet/runtime-deps:${VERSION}
 
-RUN addgroup -S dotnetgroup && \
-    adduser -S dotnet
-USER dotnet
+RUN addgroup -g 1000 dotnet && \
+    adduser -u 1000 -G dotnet -s /bin/sh -D dotnet
 
 WORKDIR /app
-COPY --chown=dotnet:dotnetgroup --from=publish /out .
+COPY --chown=dotnet:dotnet --from=publish /out .
 
+USER dotnet
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://*:8080
 ENTRYPOINT ["./Samples.WeatherForecast.Api"]
