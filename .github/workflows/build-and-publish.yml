@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  image-name: ghcr.io/peterjking/samples-weatherforecast-part-4:${{ github.sha }}
+  image-name: ghcr.io/peteking/samples-weatherforecast-part-4:${{ github.sha }}
 
 jobs:
   build-and-push:
